@@ -1,0 +1,143 @@
+<div class="col-md-7" style="margin-top:20px; margin-left: auto; margin-right: auto;">
+      <form
+      *ngIf="!isSuccessful"
+      name="form"
+      (ngSubmit)="f.form.valid && onSubmit()"
+      #f="ngForm"
+      novalidate
+      >
+  <div>
+          <div class="form-group">
+            <label for="title">Name*</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              required
+              minlength="2"
+              maxlength="50"
+              [(ngModel)]="form.name"
+              name="name"
+              #name="ngModel"
+            />
+          </div>
+          <div class="alert-danger" *ngIf="name.errors && (f.submitted || name.dirty || name.touched)">
+              <div *ngIf="name.errors.minlength">
+                Name must be at least 2 characters
+              </div>
+              <div *ngIf="name.errors.maxlength">
+                Name must be at most 50 characters
+              </div>
+              <div *ngIf="name.errors.required">
+               Name is required
+              </div>
+          </div>
+  
+          <div class="form-row">
+          <div class="form-group col-md-3">
+              <label for="title">Zip-code*</label>
+              <input
+                type="number"
+                class="form-control"
+                id="zip_code"
+                required
+                [(ngModel)]="form.zip_code"
+                name="zip_code"
+                pattern="^[0-9]{5}$"
+                #zip_code="ngModel"
+              />
+            </div>
+    
+            <div class="form-group col-md-9">
+              <label for="title">City*</label>
+              <input
+                type="text"
+                class="form-control"
+                id="city"
+                required
+                [(ngModel)]="form.city"
+                name="city"
+                #city="ngModel"
+              />
+            </div>
+          </div>
+  
+          <div class="form-row">
+          <div class="alert-danger col-md-4" *ngIf="zip_code.errors && (f.submitted || zip_code.dirty || zip_code.touched)" 
+          style="margin-right: 10px;">
+              <div *ngIf="zip_code.errors.required">zip_code is required</div>
+              <div *ngIf="zip_code.errors.pattern">
+                zip_code contain 5 numbers
+            </div>
+          </div>
+          <div class="alert-danger col-md-7" *ngIf="city.errors && (f.submitted || city.dirty || city.touched)">
+              <div *ngIf="city.errors.required">city is required</div>
+          </div>
+          </div>
+  
+          <div class="form-row">
+            <div class="form-group col-md-8">
+              <label for="title">Street*</label>
+              <input
+                type="text"
+                class="form-control"
+                id="street"
+                required
+                [(ngModel)]="form.street"
+                name="street"
+                #street="ngModel"
+              />
+            </div>
+  
+            <div class="form-group col-md-4">
+              <label for="title">House number*</label>
+              <input
+                type="text"
+                class="form-control"
+                id="house_number"
+                required
+                [(ngModel)]="form.house_number"
+                name="house_number"
+                maxlength="10"
+                minlength="1"
+                #house_number="ngModel"
+              />
+            </div>
+          </div>
+  
+          <div class="form-row">
+              <div class="alert-danger col-md-7" *ngIf="street.errors && (f.submitted || street.dirty || street.touched)">
+                  <div *ngIf="street.errors.required">street is required</div>
+              </div>
+              <div class="alert-danger col-md-4" *ngIf="house_number.errors && (f.submitted || house_number.dirty || house_number.touched)"
+               style="margin-left: 10px;">
+                  <div *ngIf="house_number.errors.required">house_number is required</div>
+                  <div *ngIf="house_number.errors.minlength">
+                      house_number must be at least 1 characters
+                  </div>
+                  <div *ngIf="house_number.errors.maxlength">
+                      house_number must be at most 10 characters
+                  </div>
+              </div>
+          </div>
+  
+  
+          <div class="form-group">
+              <button class="btn-primary">Add department</button>
+          </div>
+  
+        <div class="alert alert-warning" *ngIf="isSignupFailed">
+          Signup failed!<br />{{ errorMessage }}
+        </div>
+
+        <div>
+          <label>* required</label>
+        </div>
+    </div>
+  </form>
+    
+  <div class="alert alert-success" *ngIf="isSuccessful">
+      <h4>department was submitted successfully!</h4>
+  </div>
+</div>
+  

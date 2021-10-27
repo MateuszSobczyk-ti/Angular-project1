@@ -1,0 +1,156 @@
+<div class="col-md-7" style="  margin-left: auto; margin-right: auto;">
+    <div class="card-container">
+      <form
+        *ngIf="!isSuccessful"
+        name="form"
+        (ngSubmit)="f.form.valid && onSubmit()"
+        #f="ngForm"
+        novalidate
+      >
+      <p><br>I'm from:   
+        <input [value]="1" [(ngModel)]="sh" name="sh" type="radio" [checked]="isChecked" style="margin-left: 10px;"/>
+         Politechnika Lubelska
+      
+        <input [value]="0" [(ngModel)]="sh" name="sh" type="radio" [checked]="!isChecked" style="margin-left: 5px;"/> 
+        another company
+      </p>
+
+        <div class="form-group" *ngIf="sh == 1">
+          <label for="username">Email*</label>
+          <input
+            type="email"
+            class="form-control"
+            name="username"
+            [(ngModel)]="form.username"
+            required
+            pattern="^(.+)@pollub(\.edu\.|\.)pl$"
+            minlength="3"
+            maxlength="50"
+            #username="ngModel"
+          />
+          <div class="alert-danger" *ngIf="username.errors && (f.submitted || username.dirty || username.touched)">
+            <div *ngIf="username.errors.required">Email is required</div>
+            <div *ngIf="username.errors.minlength">
+              Email must be at least 3 characters
+            </div>
+            <div *ngIf="username.errors.maxlength">
+              Email must be at most 50 characters
+            </div>
+            <div *ngIf="username.errors.pattern">
+              Email require domains: pullub.pl or pollub.edu.pl
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="sh == 0">
+          <label for="username">Email*</label>
+          <input
+            type="email"
+            class="form-control"
+            name="username"
+            [(ngModel)]="form.username"
+            required
+            email
+            minlength="3"
+            maxlength="50"
+            #username="ngModel"
+          />
+          <div class="alert-danger" *ngIf="username.errors && (f.submitted || username.dirty || username.touched)">
+            <div *ngIf="username.errors.required">Username is required</div>
+            <div *ngIf="username.errors.minlength">
+              Email must be at least 3 characters
+            </div>
+            <div *ngIf="username.errors.maxlength">
+              Email must be at most 50 characters
+            </div>
+            <div *ngIf="username.errors.email">
+              Email must be a valid email address
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password*</label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            [(ngModel)]="form.password"
+            required
+            minlength="6"
+            #password="ngModel"
+          />
+          <div class="alert-danger" *ngIf="password.errors && (f.submitted || password.dirty || password.touched)">
+            <div *ngIf="password.errors.required">Password is required</div>
+            <div *ngIf="password.errors.minlength">
+              Password must be at least 6 characters
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone</label>
+          <input
+            type="text"
+            class="form-control"
+            name="phone"
+            [(ngModel)]="form.phone"
+            minlength="9"
+            maxlength="12"
+            #phone="ngModel"
+          />
+          <div class="alert-danger" *ngIf="phone.errors && (f.submitted || phone.dirty || phone.touched)">
+            <div *ngIf="phone.errors.minlength">
+              Phone must be at least 9 characters
+            </div>
+            <div *ngIf="phone.errors.maxlength">
+              Phone must be at most 12 characters
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="sh == 1">
+          <label for="department">departments:*</label>
+          <select [(ngModel)]="form.department" name ="department" class="form-control" 
+                  required #department="ngModel">
+            <option disabled>Select your department</option>
+            <option *ngFor="let dep of departments" [value]="dep.id">{{dep.name}}</option>
+          </select>
+          <div class="alert-danger" *ngIf="department.errors && (f.submitted || department.dirty || department.touched)">
+            <div *ngIf="department.errors.required">department is required</div>
+          </div>
+        </div>
+
+          <div class="form-group" *ngIf="sh == 0">
+            <label for="company">companies:*</label>
+            <div style="display:flex">
+            <select [(ngModel)]="form.company" name ="company" class="form-control col-md-6" 
+              required #company="ngModel">
+              <option disabled>Select your company</option>
+              <option *ngFor="let comp of companies" [value]="comp.id">{{comp.name}}</option>
+            </select>
+            <div class="col-md-8" style="margin-left: 20px">
+            <button type="button" class="btn btn-md btn-outline-primary" (click)="openModal()">add your company</button>
+            </div>
+            </div>
+            <div class="alert-danger" *ngIf="company.errors && (f.submitted || company.dirty || company.touched)">
+              <div *ngIf="company.errors.required">company is required</div>
+            </div>
+          </div>
+
+        <div class="form-group">
+          <button class="btn btn-primary btn-block">Sign Up</button>
+        </div>
+  
+        <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
+          Signup failed!<br />{{ errorMessage }}
+        </div>
+        
+        <div>
+          <label>* required</label>
+        </div>
+      </form>
+  
+      <div class="alert alert-success" *ngIf="isSuccessful">
+        Your registration is successful!
+      </div>
+    </div>
+  </div>
