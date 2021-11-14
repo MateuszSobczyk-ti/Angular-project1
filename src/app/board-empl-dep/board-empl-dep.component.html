@@ -1,0 +1,182 @@
+<div class="col-md-5" style="margin-top:20px; margin-left: auto; margin-right: auto;">
+  <form
+  *ngIf="!isSuccessful"
+  name="form"
+  (ngSubmit)="f.form.valid && onSubmit()"
+  #f="ngForm"
+  novalidate
+  >
+<div>
+      <div class="form-group">
+        <label for="title">Name*</label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          required
+          minlength="2"
+          maxlength="50"
+          [(ngModel)]="form.name"
+          name="name"
+          #name="ngModel"
+        />
+      </div>
+      <div class="alert-danger" *ngIf="name.errors && (f.submitted || name.dirty || name.touched)">
+          <div *ngIf="name.errors.minlength">
+            Name must be at least 2 characters
+          </div>
+          <div *ngIf="name.errors.maxlength">
+            Name must be at most 50 characters
+          </div>
+          <div *ngIf="name.errors.required">
+           Name is required
+          </div>
+      </div>
+
+      <div class="form-group">
+        <label for="title">Description</label>
+        <input
+          type="text"
+          class="form-control"
+          id="description"
+          maxlength="1000"
+          [(ngModel)]="form.description"
+          name="description"
+          #description="ngModel"
+        />
+      </div>
+      <div class="alert-danger" *ngIf="description.errors && (f.submitted || description.dirty || description.touched)">
+          <div *ngIf="description.errors.maxlength">
+            description must be at most 1000 characters
+          </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-8">
+          <label class="btn btn-default p-0">
+            <input type="file" (change)="selectFile($event)" />
+          </label>
+        </div>
+      
+        <div class="col-4">
+          <button type="button" class="btn btn-success btn-sm" [disabled]="!selectedFiles" (click)="upload()">
+            Upload
+          </button>
+        </div>
+      </div>
+      
+      <div *ngIf="currentFile" class="progress my-3">
+        <div
+          class="progress-bar progress-bar-info progress-bar-striped"
+          role="progressbar"
+          attr.aria-valuenow="{{ progress }}"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          [ngStyle]="{ width: progress + '%' }"
+        >
+          {{ progress }}%
+        </div>
+      </div>
+      <div *ngIf="message" class="alert alert-secondary" role="alert">{{ message }}</div>
+      
+      <div class="form-group">
+        <label for="title">Starting datetime*</label>
+        <input
+          type="datetime-local"
+          class="form-control"
+          id="data_start"
+          required
+          [min]="currentDate"
+          [(ngModel)]="form.data_start"
+          name="data_start"
+          #data_start="ngModel"
+        />
+      </div>
+      <div class="alert-danger" *ngIf="data_start.errors && (f.submitted || data_start.dirty || data_start.touched)">
+          <div *ngIf="data_start.errors.required">
+            start date is required
+          </div>
+      </div>
+
+      <div class="form-group">
+        <label for="title">Ending datetime*</label>
+        <input
+          type="datetime-local"
+          class="form-control"
+          id="data_end"
+          required
+          [min]="currentDate"
+          [(ngModel)]="form.data_end"
+          name="data_end"
+          #data_end="ngModel"
+        />
+      </div>
+      <div class="alert-danger" *ngIf="data_end.errors && (f.submitted || data_end.dirty || data_end.touched)">
+          <div *ngIf="data_end.errors.required">
+            end date is required
+          </div>
+      </div>
+
+      <!-- <input type="date" class="form-control" id="checkindate" placeholder="" [min]="currentDate"> -->
+      <div class="form-group">
+        <label for="title">Maximum number of contestant*</label>
+        <input
+          type="number"
+          class="form-control"
+          id="max_number_of_contestant"
+          required
+          min="0"
+          [(ngModel)]="form.max_number_of_contestant"
+          name="max_number_of_contestant"
+          #max_number_of_contestant="ngModel"
+        />
+      </div>
+      <div class="alert-danger" *ngIf="max_number_of_contestant.errors && (f.submitted || max_number_of_contestant.dirty || max_number_of_contestant.touched)">
+          <div *ngIf="max_number_of_contestant.errors.required">
+            Maximum number of contestant is required
+          </div>
+          <div *ngIf="max_number_of_contestant.errors.min">
+            Maximum number of contestant cannot be negative
+          </div>
+      </div>
+
+      <div class="form-group">
+        <label for="departmentId">departments:*</label>
+        <select [(ngModel)]="form.departmentId" name ="departmentId" class="form-control" 
+                required #departmentId="ngModel">
+          <option disabled>Select department</option>
+          <option *ngFor="let dep of departments" [value]="dep.id">{{dep.name}}</option>
+        </select>
+        <div class="alert-danger" *ngIf="departmentId.errors && (f.submitted || departmentId.dirty || departmentId.touched)">
+          <div *ngIf="departmentId.errors.required">department is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="eventTypeId">event types:*</label>
+        <select [(ngModel)]="form.eventTypeId" name ="eventTypeId" class="form-control" 
+                required #eventTypeId="ngModel">
+          <option disabled>Select event type</option>
+          <option *ngFor="let type of eventTypes" [value]="type.id">{{type.name}}</option>
+        </select>
+        <div class="alert-danger" *ngIf="eventTypeId.errors && (f.submitted || eventTypeId.dirty || eventTypeId.touched)">
+          <div *ngIf="eventTypeId.errors.required">event type is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button class="btn-primary">Add Event</button>
+      </div>
+
+      <div class="alert alert-warning" *ngIf="isSubmitFailed">
+        Adding Event failed!<br />{{ errorMessage }}
+      </div>
+
+      <div><label>* required</label></div>
+    </div>
+  </form>
+
+  <div class="alert alert-success" *ngIf="isSuccessful">
+    <h4>Event was submitted successfully!</h4>
+  </div>
+</div>

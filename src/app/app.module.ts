@@ -16,6 +16,7 @@ import { CustomModalComponent } from './custom-modal/custom-modal.component';
 import { NgbActiveModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
+import { BoardEmplDepComponent } from './board-empl-dep/board-empl-dep.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
     BoardAdminComponent,
     BoardModeratorComponent,
     BoardUserComponent,
-    CustomModalComponent
+    CustomModalComponent,
+    BoardEmplDepComponent,
   ],
   imports: [
     BrowserModule,

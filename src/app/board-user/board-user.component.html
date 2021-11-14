@@ -1,1 +1,139 @@
-<p>board-user works!</p>
+<div class="col-md-10" style="margin-top:20px; margin-left: auto; margin-right: auto;">
+    <div class="form-row">
+    <div class="form-group col-md-2">
+      <label for="searchedName">event name:</label>
+    <input
+      type="text"
+      name="searchedName"
+      class="form-control"
+      [(ngModel)]="searchedName"
+    />
+    </div>
+    <div class="form-group col-md-2">
+      <label for="filterDepartment">departments:</label>
+      <select [(ngModel)]="filterDepartment" name ="filterDepartment" class="form-control" >
+        <option value="wszystkie">Wszystkie</option>
+        <option *ngFor="let dep of departments" [value]="dep.name">{{dep.name}}</option>
+      </select>
+    </div>
+
+    <div class="form-group col-md-2">
+      <label for="filterEventType">event types:</label>
+      <select [(ngModel)]="filterEventType" name ="filterEventType" class="form-control" >
+        <option value="wszystkie">Wszystkie</option>
+        <option *ngFor="let type of eventTypes" [value]="type.name">{{type.name}}</option>
+      </select>
+    </div>
+
+    <div class="form-group col-md-2" *ngIf="canFilterStatus == true">
+      <label for="filterStatusEvent">status event:</label>
+      <select [(ngModel)]="filterStatusEvent" name ="filterStatusEvent" class="form-control" >
+        <option value="wszystkie">Wszystkie</option>
+        <option *ngFor="let status of statusEvent" [value]="status.name">{{status.name}}</option>
+      </select>
+    </div>
+
+    <div class="form-group col-md-2">
+      <label for="filterSigned">signed to event?</label>
+      <select [(ngModel)]="filterSigned" name ="filterSigned" class="form-control" >
+        <option value="wszystkie">Wszystkie</option>
+        <option value="tak" >Tak</option>
+        <option value="nie">Nie</option>
+      </select>
+    </div>
+
+    <div class="form-group col-md-2 input-group-append"> 
+      <button style="height:36px; margin-top:32px;"
+        class="btn btn-outline-secondary"
+        type="button"
+        (click)="search()"
+      >
+        Search
+      </button>
+    </div>
+  </div>
+<div class="list row mw-90" style="margin-top:20px;">
+    <div class="col-md-4">
+      <h4>Events List</h4>
+      <ul class="list-group">
+        <li
+          class="list-group-item"
+          *ngFor="let event of events; let i = index"
+          [class.active]="i == currentIndex"
+          (click)="setActiveEvent(event, i)"
+        >
+          {{ event.name }}
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-8">
+      <div *ngIf="currentEvent.id">
+        <div style="text-align: center;">
+           <h4><strong> {{ currentEvent.name }} </strong></h4>
+        </div>
+        <div *ngIf="currentEvent.imageData" style="margin: 10px;">
+          <img [src]="imgSrc" style="width: 90%; height: 300px"/>
+        </div>
+        <div>
+          <label><strong>Description:</strong></label>
+          {{ currentEvent.description }}
+        </div>
+        <div>
+            <label><strong>Maximum number of contestants:</strong></label>
+            {{ currentEvent.max_number_of_contestant }}
+          </div>
+        <div>
+          <label><strong>When?</strong></label>
+          {{ currentEvent.data_start }} - {{ currentEvent.data_end }}
+        </div>
+
+        <div>
+            <label><strong>Where?</strong></label>
+            {{ currentEvent.department }}
+        </div>
+
+        <div>
+            <label><strong>Event type:</strong></label>
+            {{ currentEvent.eventType }}
+        </div>
+
+        <div>
+            <label><strong>Status event?</strong></label>
+            {{ currentEvent.statusEvent }}
+        </div>
+
+        <div *ngIf="button1" class="input-group-append">
+            <button
+             class="btn btn-success"
+             type="button"
+             (click)="enroll()"
+             disabled
+             >
+               Zapisano
+             </button>
+        </div>
+        <div *ngIf="button2" class="input-group-append">
+          <div *ngIf="currentEvent.czyMoznaZapisac == true">
+           <button
+            class="btn btn-outline-secondary"
+            type="button"
+            (click)="enroll()"
+            >
+              Zapisz mnie
+            </button>
+          </div>
+          <div *ngIf="currentEvent.czyMoznaZapisac == false" style="height:45px;" class="alert alert-warning" role="alert">
+            <p>
+              Brak mozliwosci zapisow
+            </p>
+          </div>
+      </div>
+
+      <div *ngIf="currentEvent.czyMoznaOceniac == true">
+        <ngb-rating [max]="5" [(rate)]="currentEvent.rate" [readonly]="false" (rateChange)="rateEvent()"
+        style="color: #FFC107; font-size: 40px;"></ngb-rating>
+      </div>
+
+    </div>
+  </div>
+</div>
