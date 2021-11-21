@@ -55,5 +55,13 @@ export class EventService {
     findEventByName(name: any): Observable<Event[]> {
       return this.http.get<Event[]>(baseUrl + 'events' + '?name=' + name);
     }
+
+    updateEvent(id: any, data: any): Observable<any> {
+      return this.http.put(`${baseUrl}event/${id}`, data);
+    }
+
+    getEvent(id: any): Observable<Event> {
+      return this.http.get(`${baseUrl}events/${id}`);
+    }
   
 }

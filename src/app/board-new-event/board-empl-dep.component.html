@@ -51,7 +51,7 @@
           </div>
       </div>
 
-      <div class="form-group row">
+      <div class="form-group row" >
         <div class="col-8">
           <label class="btn btn-default p-0">
             <input type="file" (change)="selectFile($event)" />
@@ -105,7 +105,7 @@
           class="form-control"
           id="data_end"
           required
-          [min]="currentDate"
+          [min]="form.data_start == null ? currentDate : form.data_start.slice(0,16)"
           [(ngModel)]="form.data_end"
           name="data_end"
           #data_end="ngModel"
@@ -117,7 +117,6 @@
           </div>
       </div>
 
-      <!-- <input type="date" class="form-control" id="checkindate" placeholder="" [min]="currentDate"> -->
       <div class="form-group">
         <label for="title">Maximum number of contestant*</label>
         <input
@@ -153,6 +152,24 @@
       </div>
 
       <div class="form-group">
+        <label for="place">place(eg."budynek 6B, sala nr 2"):</label>
+        <input 
+          [required] = "emplCompany ? false : true" 
+          [disabled] = "emplCompany ? true : false" 
+          type="text"
+          class="form-control"
+          id="place"
+          [(ngModel)]="form.place"
+          name="place"
+          #place="ngModel" 
+        />
+      </div>
+      <div class="alert-danger" *ngIf="emplCompany == false && place.errors && (f.submitted || place.dirty || place.touched)">
+        <div *ngIf="place.errors.required">place is required</div>
+      </div>
+
+
+      <div class="form-group">
         <label for="eventTypeId">event types:*</label>
         <select [(ngModel)]="form.eventTypeId" name ="eventTypeId" class="form-control" 
                 required #eventTypeId="ngModel">
@@ -164,8 +181,54 @@
         </div>
       </div>
 
+      <div class="form-group" *ngIf="emplCompany == false">
+        <label for="statusEventId">status event:*</label>
+        <select [(ngModel)]="form.statusEventId" name ="statusEventId" class="form-control" 
+                required #statusEventId="ngModel">
+          <option disabled>Select event type</option>
+          <option *ngFor="let st of statusEvent" [value]="st.id">{{st.name}}</option>
+        </select>
+        <div class="alert-danger" *ngIf="statusEventId.errors && (f.submitted || statusEventId.dirty || statusEventId.touched)">
+          <div *ngIf="statusEventId.errors.required">status event is required</div>
+        </div>
+      </div>
+
       <div class="form-group">
+        <label for="comments"> Messages:</label>
+        <textarea
+          rows="7"
+          type="text"
+          class="form-control"
+          id="comments"
+          name="comments"
+          disabled
+         >
+          {{ event.comments }}
+        </textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="comments">Leave a message: </label>
+        <input
+          type="text"
+          class="form-control"
+          id="comments"
+          maxlength="1000"
+          [(ngModel)]="form.comments"
+          name="comments"
+          #comments="ngModel"
+        />
+      </div>
+
+      <div class="form-group" *ngIf="this.isUpdate == false">
         <button class="btn-primary">Add Event</button>
+      </div>
+
+      <div class="form-group" *ngIf="this.isUpdate == true">
+        <button type="button"
+        (click)="onUpdate()"
+        class="btn-primary">
+        Update Event</button>
       </div>
 
       <div class="alert alert-warning" *ngIf="isSubmitFailed">

@@ -3,8 +3,8 @@ export class Event {
     name?: string;
     description?: string;
     max_number_of_contestant?: number;
-	data_start?: Date;
-    data_end?: Date;
+	data_start?: String;
+    data_end?: String;
 	department?: string;
 	eventType?: string;
 	statusEvent?: string;
@@ -13,4 +13,7 @@ export class Event {
     czyMoznaZapisac?: boolean;
     czyMoznaOceniac?: boolean;
     rate?: any;
+    comments?: string;
+    organizer?: string;
+    place?: string;
 }

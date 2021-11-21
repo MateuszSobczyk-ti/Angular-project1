@@ -8,7 +8,7 @@ import { EventService } from '../_services/event.service';
 import { TokenStorageService } from '../_services/token-storage.service';
 
 @Component({
-  selector: 'app-board-user',
+  selector: 'app-board-user', 
   templateUrl: './board-user.component.html',
   styleUrls: ['./board-user.component.css']
 })
@@ -31,6 +31,7 @@ export class BoardUserComponent implements OnInit {
   button1 = false;
   button2 = false;
   canFilterStatus = false;
+  emplCompany = false;
 
   constructor(private departmentService: DepartmentService, private tokenStorageService: TokenStorageService, 
       private eventService: EventService) { }
@@ -49,10 +50,10 @@ export class BoardUserComponent implements OnInit {
         this.allEvents = this.events;
         console.log(data);
         this.canFilterStatus = this.tokenStorageService.getUser().roles.includes('ROLE_ADMIN') 
-        || this.tokenStorageService.getUser().roles.includes('ROLE_MODERATOR') 
         || this.tokenStorageService.getUser().roles.includes('ROLE_EMPL_DEPARTMENT') 
         || this.tokenStorageService.getUser().roles.includes('ROLE_EMPL_COMPANY');
-        if (this.canFilterStatus == false) {
+        this.emplCompany = this.tokenStorageService.getUser().roles.includes('ROLE_EMPL_COMPANY');
+        if (this.canFilterStatus == false || this.emplCompany == true) {
           this.search();
         } 
       },
@@ -103,6 +104,8 @@ export class BoardUserComponent implements OnInit {
   setActiveEvent(event: Event, index: number): void {
     this.currentEvent = event;
     this.currentIndex = index;
+    this.currentEvent.data_start = this.currentEvent.data_start?.slice(0,16).replace("T"," ").replace("-",".").replace("-",".");
+    this.currentEvent.data_end = this.currentEvent.data_end?.slice(0,16).replace("T", " ").replace("-",".").replace("-",".");
     this.imgSrc = "data:image/png;base64,"+ this.currentEvent.imageData;
     if (this.currentEvent.czyZapisano) {
       this.button1 = true;
@@ -120,7 +123,7 @@ export class BoardUserComponent implements OnInit {
     if (this.canFilterStatus == false) {
       this.filterStatusEvent = "ZAAKCEPTOWANY";
     }
-
+    
     if (this.allEvents != null) {
       if (this.searchedName.length > 0) {
         this.events = this.allEvents.filter(i => i.name == this.searchedName);
@@ -142,6 +145,9 @@ export class BoardUserComponent implements OnInit {
         } else {
           this.events = this.events.filter(i => i.czyZapisano == false);
         }
+      }
+      if (this.emplCompany == true) {
+        this.events = this.events.filter(i => i.czyZapisano == true);
       }
     }
     console.log(this.events);
