@@ -162,9 +162,9 @@ export class BoardUserComponent implements OnInit {
     this.eventService.enroll(data).subscribe(
       response => {
         console.log(data);
-        this.ngOnInit();
         this.button1 = true;
         this.button2 = false;
+        this.currentEvent.czyZapisano = true;
       },
       error => {
         console.log(error);

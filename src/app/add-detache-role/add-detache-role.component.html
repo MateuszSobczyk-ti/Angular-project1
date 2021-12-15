@@ -1,0 +1,39 @@
+<div style="margin-top:20px;" *ngIf="!isSuccessful">
+    <p style="margin-left: 30px;"><br>I want to:   
+        <input [value]="1" [(ngModel)]="sh" id="opt1" name="sh" type="radio" [checked]="isChecked" style="margin-left: 10px;"/>
+         <label style="padding-right: 10px;" for="opt1">Add role</label>
+      
+        <input [value]="0" [(ngModel)]="sh" id="opt2" name="sh" type="radio" [checked]="!isChecked" style="margin-left: 5px;"/> 
+          <label for="opt2"> detache role</label>
+    </p>
+
+    <label *ngIf="user" style="margin-left: 30px;"><strong>{{ user.username }}</strong></label>
+    <label class="form-group" style="margin-left: 20px;">
+        <select [(ngModel)]="role" name ="roleId" class="form-control" 
+                required #eventTypeId="ngModel">
+          <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
+        </select>
+    </label>
+    <div align="center" style="margin-bottom: 40px;">
+    <button
+    style="margin-left: 5px;"
+    class="btn-warning"
+    type="button"
+    (click)="closeModal()"
+  >
+    Cancel
+  </button> 
+  <button
+  style="margin-left: 5px;"
+  class="btn-primary"
+  type="button"
+  (click)="action()"
+>
+  Confirm action
+</button> 
+  </div>
+</div>
+
+<div class="alert alert-success" *ngIf="isSuccessful">
+    <h4>{{ message }}</h4>
+</div>

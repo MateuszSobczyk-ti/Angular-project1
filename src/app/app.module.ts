@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -16,6 +16,9 @@ import { NgbActiveModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { BoardEmplDepComponent } from './board-new-event/board-empl-dep.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { RemoveUserComponent } from './remove-user/remove-user.component';
+import { AddDetacheRoleComponent } from './add-detache-role/add-detache-role.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +31,8 @@ import { BoardEmplDepComponent } from './board-new-event/board-empl-dep.componen
     BoardUserComponent,
     CustomModalComponent,
     BoardEmplDepComponent,
+    RemoveUserComponent,
+    AddDetacheRoleComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,7 +40,11 @@ import { BoardEmplDepComponent } from './board-new-event/board-empl-dep.componen
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgbModule
+    NgbModule,
+    MatProgressBarModule
+  ],
+  schemas: [ 
+    CUSTOM_ELEMENTS_SCHEMA
   ],
   providers: [authInterceptorProviders, NgbActiveModal],
   bootstrap: [AppComponent]

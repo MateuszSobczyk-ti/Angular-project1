@@ -52,7 +52,12 @@
       </button>
     </div>
   </div>
-<div class="list row mw-90" style="margin-top:20px;">
+
+<div class="alert alert-warning" *ngIf="events?.length == 0">
+  No event found
+</div>
+
+<div *ngIf="events?.length != 0" class="list row mw-90" style="margin-top:20px;">
     <div class="col-md-4">
       <h4>Events List</h4>
       <ul class="list-group">
@@ -75,87 +80,87 @@
     <div class="col-md-8">
       <div *ngIf="currentEvent.id">
         <div style="text-align: center;">
-           <h4><strong> {{ currentEvent.name }} </strong></h4>
+           <h2 style="margin-bottom: -5px;"><strong> {{ currentEvent.name }} </strong></h2>
+           <label style="font-family: cursive; text-align:center">
+            {{ currentEvent.eventType }}
+          </label>
         </div>
         <div *ngIf="currentEvent.imageData" style="margin: 10px;">
-          <img [src]="imgSrc" style="width: 90%; height: 300px"/>
+          <img [src]="imgSrc" class="center"/>
         </div>
-        <div>
-          <label><strong>Description:</strong></label>
+        <div style="text-align: center;">
           {{ currentEvent.description }}
         </div>
-        <div>
-            <label><strong>Maximum number of contestants:</strong></label>
-            {{ currentEvent.max_number_of_contestant }}
-          </div>
-        <div>
-          <label><strong>When?</strong></label>
-          {{ currentEvent.data_start }} - {{ currentEvent.data_end }}
+        <div style="margin-top:15px;">
+          <img style="height:40px; width:auto;" 
+          src="https://www.transparentpng.com/thumb/calendar/green-calendar-vector-icon-png-20.png" alt="green calendar vector icon png @transparentpng.com">
+          <label style="margin-left: 20px;">{{ currentEvent.data_start }} - {{ currentEvent.data_end }}</label>
         </div>
 
-        <div>
-            <label><strong>Department?</strong></label>
-            {{ currentEvent.department }}
+        <div style="margin-top:15px; margin-left:8px;">
+          <img style="height:40px; width:auto;" 
+          src="https://www.transparentpng.com/thumb/school/pY9KRl-school-transparent.png" alt="school transparent @transparentpng.com">
+            <label style="margin-left: 23px;">{{ currentEvent.department }}, {{ currentEvent.place }}</label>
         </div>
 
-        <div *ngIf="currentEvent.place">
-          <label><strong>Where?</strong></label>
-          {{ currentEvent.place }}
-      </div>
-
-        <div>
-            <label><strong>Event type:</strong></label>
-            {{ currentEvent.eventType }}
+        <div *ngIf="canFilterStatus" style="margin-top: 15px;">
+          <label><strong>Maximum number of contestants :</strong></label>
+          {{ currentEvent.max_number_of_contestant }}
         </div>
 
-        <div>
-            <label><strong>Status event?</strong></label>
+        <div *ngIf="canFilterStatus">
+            <label><strong>Status event :</strong></label>
             {{ currentEvent.statusEvent }}
         </div>
 
         <div *ngIf="canFilterStatus == true">
-          <label><strong>Organizer ?</strong></label>
+          <label><strong>Organizer :</strong></label>
           {{ currentEvent.organizer }}
       </div>
 
-        <div *ngIf="button1 && currentEvent.statusEvent == 'ZAAKCEPTOWANY'" class="input-group-append">
-            <button
-             class="btn btn-success"
-             type="button"
-             (click)="enroll()"
-             disabled
-             >
-               Jestes zapisany
-             </button>
-        </div>
-        <div *ngIf="button2 && currentEvent.statusEvent == 'ZAAKCEPTOWANY'" class="input-group-append">
-          <div *ngIf="currentEvent.czyMoznaZapisac == true">
-           <button
-            class="btn btn-outline-secondary"
-            type="button"
-            (click)="enroll()"
-            >
-              Zapisz mnie
-            </button>
+      <table style="width:100%;">
+        <tr>
+          <td style="width: 50%;">
+            <div *ngIf="button1 && currentEvent.statusEvent == 'ZAAKCEPTOWANY'" class="input-group-append">
+              <button style="margin-left:30%;"
+               class="btn btn-success"
+               type="button"
+               (click)="enroll()"
+               disabled
+               >
+                 You've enrolled
+               </button>
           </div>
-          <div *ngIf="currentEvent.czyMoznaZapisac == false  && currentEvent.statusEvent == 'ZAAKCEPTOWANY'" style="height:45px;" class="alert alert-warning" role="alert">
-            <p>
-              Brak mozliwosci zapisow
+          <div *ngIf="button2 && currentEvent.statusEvent == 'ZAAKCEPTOWANY' && currentEvent.czyMoznaZapisac" class="input-group-append">
+             <button style="margin-left:30%;"
+              class="btn btn-outline-secondary"
+              type="button"
+              (click)="enroll()"
+              >
+                Enroll
+              </button>
+          <div *ngIf="button2 && !currentEvent.czyMoznaZapisac && currentEvent.statusEvent == 'ZAAKCEPTOWANY'"
+           style="height:45px;" class="alert alert-warning" role="alert">
+             <p>
+              There is no possibility to sign in
             </p>
           </div>
-      </div>
-
-      <div *ngIf="currentEvent.czyMoznaOceniac == true">
-        <ngb-rating [max]="5" [(rate)]="currentEvent.rate" [readonly]="false" (rateChange)="rateEvent()"
-        style="color: #FFC107; font-size: 40px;"></ngb-rating>
-      </div>
-
-      <div *ngIf="canFilterStatus == true && currentEvent.statusEvent != 'ZAAKCEPTOWANY'">
-      <a class="badge badge-warning" routerLink="/events/{{ currentEvent.id }}">
-        Edit
-        </a>
-      </div>
-
+        </div>
+          </td>
+          <td style="width: 50%;">
+            <div *ngIf="currentEvent.czyMoznaOceniac" style="margin-top: 10px;" align="center">
+              <ngb-rating [max]="5" [(rate)]="currentEvent.rate" [readonly]="false" (rateChange)="rateEvent()"
+              style="color: #FFC107; font-size: 40px;"></ngb-rating>
+            </div>
+          </td> 
+        </tr>
+      </table>
+      <div *ngIf="canFilterStatus && currentEvent.statusEvent != 'ZAAKCEPTOWANY'" align="center">
+        <a style="font-size:16px; padding:15px;" class="badge badge-warning" routerLink="/events/{{ currentEvent.id }}">
+          Edit
+          </a>
+        </div>
     </div>
   </div>
+</div>
 </div>

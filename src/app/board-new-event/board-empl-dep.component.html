@@ -1,3 +1,13 @@
+<script>
+	document.getElementById("upload-file").onchange = function () {
+		if(this.value.split(/(\\|\/)/g).pop()=='') {
+			document.getElementById("upload-label").innerHTML = '<em>Choose file</em>';
+		}
+		else {
+			document.getElementById("upload-label").innerHTML = this.value.split(/(\\|\/)/g).pop();
+		}
+	};
+</script>
 <div class="col-md-5" style="margin-top:20px; margin-left: auto; margin-right: auto;">
   <form
   *ngIf="!isSuccessful"
@@ -51,11 +61,11 @@
           </div>
       </div>
 
-      <div class="form-group row" >
-        <div class="col-8">
-          <label class="btn btn-default p-0">
-            <input type="file" (change)="selectFile($event)" />
-          </label>
+      <div class="form-group row">
+        <div class="field upload col-7">
+          <label *ngIf="!selectedFiles"><em>Choose file</em></label>
+          <label *ngIf="selectedFiles"><em>{{ selectedFiles.item(0)?.name }}</em></label>
+            <input type="file" id="upload-file" name="upload-file" (change)="selectFile($event)"/>
         </div>
       
         <div class="col-4">
@@ -79,75 +89,85 @@
       </div>
       <div *ngIf="message" class="alert alert-secondary" role="alert">{{ message }}</div>
       
-      <div class="form-group">
-        <label for="title">Starting datetime*</label>
-        <input
-          type="datetime-local"
-          class="form-control"
-          id="data_start"
-          required
-          [min]="currentDate"
-          [(ngModel)]="form.data_start"
-          name="data_start"
-          #data_start="ngModel"
-        />
-      </div>
-      <div class="alert-danger" *ngIf="data_start.errors && (f.submitted || data_start.dirty || data_start.touched)">
-          <div *ngIf="data_start.errors.required">
-            start date is required
-          </div>
-      </div>
-
-      <div class="form-group">
-        <label for="title">Ending datetime*</label>
-        <input
-          type="datetime-local"
-          class="form-control"
-          id="data_end"
-          required
-          [min]="form.data_start == null ? currentDate : form.data_start.slice(0,16)"
-          [(ngModel)]="form.data_end"
-          name="data_end"
-          #data_end="ngModel"
-        />
-      </div>
-      <div class="alert-danger" *ngIf="data_end.errors && (f.submitted || data_end.dirty || data_end.touched)">
-          <div *ngIf="data_end.errors.required">
-            end date is required
-          </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="title">Starting datetime*</label>
+          <input
+            type="datetime-local"
+            class="form-control"
+            id="data_start"
+            required
+            [min]="currentDate"
+            [(ngModel)]="form.data_start"
+            name="data_start"
+            #data_start="ngModel"
+          />
+        </div>
+        <div class="form-group col-md-6">
+          <label for="title">Ending datetime*</label>
+          <input
+            type="datetime-local"
+            class="form-control"
+            id="data_end"
+            required
+            [min]="form.data_start == null ? currentDate : form.data_start.slice(0,16)"
+            [(ngModel)]="form.data_end"
+            name="data_end"
+            #data_end="ngModel"
+          />
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="title">Maximum number of contestant*</label>
-        <input
-          type="number"
-          class="form-control"
-          id="max_number_of_contestant"
-          required
-          min="0"
-          [(ngModel)]="form.max_number_of_contestant"
-          name="max_number_of_contestant"
-          #max_number_of_contestant="ngModel"
-        />
-      </div>
-      <div class="alert-danger" *ngIf="max_number_of_contestant.errors && (f.submitted || max_number_of_contestant.dirty || max_number_of_contestant.touched)">
-          <div *ngIf="max_number_of_contestant.errors.required">
-            Maximum number of contestant is required
-          </div>
-          <div *ngIf="max_number_of_contestant.errors.min">
-            Maximum number of contestant cannot be negative
-          </div>
+      <div class="form-row">
+        <div class="alert-danger col-md-6" *ngIf="data_start.errors && (f.submitted || data_start.dirty || data_start.touched)">
+            <div *ngIf="data_start.errors.required">
+              start date is required
+            </div>
+        </div>
+
+        <div class="alert-danger col-md-6" *ngIf="data_end.errors && (f.submitted || data_end.dirty || data_end.touched)">
+            <div *ngIf="data_end.errors.required">
+              end date is required
+            </div>
+        </div>
       </div>
 
-      <div class="form-group">
+      <div class="form-row">
+      <div class="form-group col-md-7">
         <label for="departmentId">departments:*</label>
         <select [(ngModel)]="form.departmentId" name ="departmentId" class="form-control" 
                 required #departmentId="ngModel">
           <option disabled>Select department</option>
           <option *ngFor="let dep of departments" [value]="dep.id">{{dep.name}}</option>
         </select>
-        <div class="alert-danger" *ngIf="departmentId.errors && (f.submitted || departmentId.dirty || departmentId.touched)">
+        </div>
+
+        <div class="form-group col-md-5">
+          <label for="title">Maximum number of contestant*</label>
+          <input
+            type="number"
+            class="form-control"
+            id="max_number_of_contestant"
+            required
+            min="3"
+            [(ngModel)]="form.max_number_of_contestant"
+            name="max_number_of_contestant"
+            #max_number_of_contestant="ngModel"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="alert-danger col-md-7" *ngIf="departmentId.errors && (f.submitted || departmentId.dirty || departmentId.touched)">
           <div *ngIf="departmentId.errors.required">department is required</div>
+        </div>
+        <div class="alert-danger col-md-5" *ngIf="max_number_of_contestant.errors && (f.submitted || max_number_of_contestant.dirty || max_number_of_contestant.touched)">
+            <div *ngIf="max_number_of_contestant.errors.required">
+              Maximum number of contestant is required
+            </div>
+            <div *ngIf="max_number_of_contestant.errors.min">
+              Maximum number of contestant must be at least 3
+            </div>
         </div>
       </div>
 

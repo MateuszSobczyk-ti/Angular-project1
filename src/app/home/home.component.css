@@ -1,0 +1,27 @@
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+    margin-bottom: 4%;
+    width: 50%;
+  }
+
+.button {
+    padding: 12px 35px;
+    margin-top: 30px;
+    display: inline-block;
+    color: #3c4975;
+    letter-spacing: 2px;
+    text-decoration: none;
+    font-size: 2em;
+    overflow: hidden;
+    border-radius: 20px;
+}
+ 
+    /*creating animation effect*/
+.button:hover {
+    color: #111;
+    background: #5a8ddc;
+    box-shadow: 0 0 30px #5a8ddc;
+}

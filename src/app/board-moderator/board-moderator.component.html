@@ -1,6 +1,48 @@
 <div class="col-md-7" style="margin-top:20px; margin-left: auto; margin-right: auto;">
-      <form
-      *ngIf="!isSuccessful"
+  <button 
+    class="btn btn-outline-secondary"
+    type="button"
+    (click)="showAddingDepartment()"
+  >
+    Add new department
+  </button>
+
+  <button
+    style="margin-left: 20px;"
+    class="btn btn-outline-secondary"
+    type="button"
+    (click)="showEventsRanking()"
+  >
+    Events ranking
+  </button>
+
+  <button
+  style="margin-left: 20px;"
+  class="btn btn-outline-secondary"
+  type="button"
+  (click)="showUsers()"
+>
+  Users list
+</button>
+
+<button
+  style="margin-left: 20px;"
+  class="btn btn-outline-secondary"
+  type="button"
+  (click)="showAddingEventTypes()"
+  >
+  Add new event type
+</button>
+</div>
+
+<div *ngIf="buttonDepartment" class="col-md-7" style="margin-top:80px; margin-left: auto; margin-right: auto;">
+  <h3>Available departments now:</h3>
+  <ul style="padding-bottom: 30px;">
+    <li *ngFor="let dep of departments">
+      <label>{{ dep.name }} </label>
+    </li>  
+  </ul>   
+  <form
       name="form"
       (ngSubmit)="f.form.valid && onSubmit()"
       #f="ngForm"
@@ -126,7 +168,7 @@
               <button class="btn-primary">Add department</button>
           </div>
   
-        <div class="alert alert-warning" *ngIf="isSignupFailed">
+        <div class="alert alert-warning" *ngIf="isSignupFailed and !isSuccessful">
           Signup failed!<br />{{ errorMessage }}
         </div>
 
@@ -136,8 +178,133 @@
     </div>
   </form>
     
-  <div class="alert alert-success" *ngIf="isSuccessful">
+  <div class="alert alert-success" *ngIf="isSuccessful and !isSignupFailed">
       <h4>department was submitted successfully!</h4>
   </div>
 </div>
   
+
+<div *ngIf="buttonRanking" class="col-md-7" style="margin-top:80px; margin-left: auto; margin-right: auto;">
+  <table style="width:100%;">
+    <tr>
+      <td style="width:50%">
+        <h2>Events Ranking</h2> 
+      </td>
+      <td align="right">
+        <button
+        style="margin-right: 10px; font-size:11px;"
+        class="btn btn-danger"
+        type="button"
+        (click)="exportPdf()"
+      >
+        Download PDF
+      </button>
+      </td>
+    </tr>
+  </table>
+  <ul class="list-group">
+    <li 
+      class="list-group-item"
+      *ngFor="let event of events">
+      <label style="width: 180px;"><strong>{{ event.name }} </strong></label>
+      <label *ngIf="event.averageRate" style="width: 20px;">{{ event.averageRate }}</label>
+      <label *ngIf="event.averageRate" style="margin-top: 10px;">
+        <ngb-rating [max]="5" [(rate)]="event.averageRate" [readonly]="true">
+          <ng-template let-fill="fill">
+            <span class="defaultHeart" [class.filled]="fill === 100">
+              <span class="paintedHeart" [style.width.%]="fill">&#9733;</span>&#9733;
+            </span>
+          </ng-template>
+        </ngb-rating>
+      </label>
+      <label style="width: 20%; margin-left:40px;"><mat-progress-bar [value]="event.contestantPercentage"></mat-progress-bar></label>
+
+      {{ event.contestantNumbers }}
+      <label>(participants)</label>
+      <div><label><strong>Organizer</strong>: {{ event.company }}, {{ event.organizer }}</label></div>
+    </li>
+  </ul>
+</div>
+
+<div *ngIf="buttonUsers" class="col-md-8" style="margin-top:80px; margin-left: auto; margin-right: auto; ">
+  <h2>Users list</h2>
+  <ul class="list-group">
+    <li 
+      class="list-group-item"
+      *ngFor="let user of users">
+      <label style="width: 230px;"><strong>{{ user.username }} </strong></label>
+      <label *ngIf="user.department" style="width: 220px;">Department: {{ user.department }}</label>
+      <label *ngIf="user.company" style="width: 220px;">Company: {{ user.company }}</label>
+      <label *ngIf="user.phone" style="width: 120px;">Phone: {{ user.phone }}</label><br>
+      <label *ngIf="user.averageRate" style="margin-top: 10px; width:300px;">
+        <ngb-rating [max]="5" [(rate)]="user.averageRate" [readonly]="true">
+          <ng-template let-fill="fill">
+            <span class="defaultHeart" [class.filled]="fill === 100">
+              <span class="paintedHeart" [style.width.%]="fill">&#9733;</span>&#9733;
+            </span>
+          </ng-template>
+        </ngb-rating>
+        <label>(average user rates)</label>
+      </label>
+      <label *ngIf="user.numberSignedEvents" style="margin-left:5%; width: 180px;">Number of signed events: {{ user.numberSignedEvents }}</label><br>   
+      <strong>Roles:</strong>
+      <ul style="padding-bottom: 30px;">
+        <li *ngFor="let role of user.roles">
+          <label *ngIf="role.name == 'ROLE_ADMIN'" style="color:crimson;">{{ role.name }} </label>
+          <label *ngIf="role.name != 'ROLE_ADMIN'">{{ role.name }} </label>
+        </li>  
+      </ul>
+      <div style="width:42%; margin-left:59%; margin-top:-50px;">
+      <button
+      class="btn-primary"
+      type="button"
+      (click)="openModalRole(user)"
+    >
+      Add/delete authority
+    </button> 
+      <button
+      style="margin-left: 5px;"
+      class="btn-danger"
+      type="button"
+      (click)="openModalToRemove(user)"
+    >
+      Remove
+    </button> 
+    </div>
+    </li>
+  </ul>
+</div>
+
+<div *ngIf="buttonEventType" class="col-md-7" style="margin-top:80px; margin-left: auto; margin-right: auto;">
+  <h3>Available event types now:</h3>
+  <ul style="padding-bottom: 30px;">
+    <li *ngFor="let type of eventTypes">
+      <label>{{ type.name }} </label>
+    </li>  
+  </ul>
+  <div>
+      <label for="title">Name</label>
+      <label style="margin-left: 20px; width:50%">
+      <input
+        type="text"
+        class="form-control"
+        id="eventTypeName"
+        [(ngModel)]="eventTypeName"
+      /></label>
+      <button
+      style="margin-left: 20px;"
+      class="btn-primary"
+      type="button"
+      (click)="onSubmitEventType()"
+    >
+      Add event type
+    </button>
+      <div class="alert alert-success" *ngIf="isAddingSuccessfull">
+          {{ addingMessage }}
+      </div>
+      <div class="alert alert-warning" *ngIf="isAddingFailed">
+        {{ addingMessage }}
+    </div>
+  </div>
+</div>
+      

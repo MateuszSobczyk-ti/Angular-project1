@@ -2,3 +2,23 @@
     max-width: 400px;
     margin: auto;
   }
+
+  .filled{
+    color: #FFC107; 
+    font-size: 30px;
+}
+
+.defaultHeart{
+    position: relative;
+    display: inline-block;
+    color:gray;
+    font-size: 30px;
+}
+
+.paintedHeart{
+    position: absolute;
+      display: inline-block;
+      overflow: hidden;
+      color: #FFC107; 
+      font-size: 30px;
+}

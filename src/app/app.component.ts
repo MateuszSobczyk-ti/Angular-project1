@@ -27,8 +27,7 @@ export class AppComponent implements OnInit {
       this.roles = user.roles;
 
       this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
-      this.showEmplDepBoard = this.roles.includes('ROLE_EMPL_DEPARTMENT');
-      this.showEmplDepBoard = this.roles.includes('ROLE_EMPL_COMPANY');
+      this.showEmplDepBoard = this.roles.includes('ROLE_EMPL_DEPARTMENT') || this.roles.includes('ROLE_EMPL_COMPANY');
 
       this.username = user.username;
     }

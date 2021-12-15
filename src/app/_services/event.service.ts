@@ -5,6 +5,7 @@ import { Event} from '../models/event.model';
 import { Department } from '../models/department.model';
 import { EventType } from '../models/event-type.model';
 import { StatusEvent } from '../models/status-event.model';
+import { User } from '../models/user.model';
 
 const baseUrl = 'http://localhost:8080/api/event/';
 
@@ -62,6 +63,10 @@ export class EventService {
 
     getEvent(id: any): Observable<Event> {
       return this.http.get(`${baseUrl}events/${id}`);
+    }
+
+    getUser(): Observable<User> {
+      return this.http.get<User>(baseUrl + 'user');
     }
   
 }

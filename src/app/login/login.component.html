@@ -1,4 +1,4 @@
-<div class="col-md-7" style="margin-top:20px; margin-left: auto; margin-right: auto;">
+<div class="col-md-7" style="margin-top:60px; margin-left: auto; margin-right: auto;">
     <div class=" card-container">
       <form
         *ngIf="!isLoggedIn"
@@ -58,13 +58,13 @@
             role="alert"
             *ngIf="f.submitted && isLoginFailed"
           >
-            Login failed: {{ errorMessage }}
+            Login failed
           </div>
         </div>
       </form>
   
       <div class="alert alert-success" *ngIf="isLoggedIn">
-        Logged in as {{ roles }}.
+        Logged in as {{ username }}.
       </div>
     </div>
   </div>

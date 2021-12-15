@@ -1,0 +1,25 @@
+<div style="text-align: center; margin-top:30px;" *ngIf="!isSuccessful">
+    <label *ngIf="userToRemove"> Are you sure you want to remove user <strong>{{ userToRemove.username }}</strong> ?</label>
+    <div style="margin-bottom: 40px;">
+    <button
+    style="margin-left: 5px;"
+    class="btn-warning"
+    type="button"
+    (click)="closeModal()"
+  >
+    Cancel
+  </button> 
+  <button
+  style="margin-left: 5px;"
+  class="btn-danger"
+  type="button"
+  (click)="removeUser()"
+>
+  Remove
+</button> 
+  </div>
+</div>
+
+<div class="alert alert-success" *ngIf="isSuccessful">
+    <h4>{{ message }}</h4>
+</div>

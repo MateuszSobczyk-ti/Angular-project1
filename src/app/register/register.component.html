@@ -1,4 +1,4 @@
-<div class="col-md-7" style="  margin-left: auto; margin-right: auto;">
+<div class="col-md-7" style="margin-top:30px; margin-left: auto; margin-right: auto;">
     <div class="card-container">
       <form
         *ngIf="!isSuccessful"
@@ -7,15 +7,17 @@
         #f="ngForm"
         novalidate
       >
-      <p><br>I'm from:   
-        <input [value]="1" [(ngModel)]="sh" name="sh" type="radio" [checked]="isChecked" style="margin-left: 10px;"/>
-         Politechnika Lubelska
-      
-        <input [value]="0" [(ngModel)]="sh" name="sh" type="radio" [checked]="!isChecked" style="margin-left: 5px;"/> 
-        another company
-      </p>
+      I'm from:   
+        <div class="form-check form-check-inline" style="margin-left: 20px;">
+          <input class="form-check-input" [value]="1" [(ngModel)]="sh" id="opt1" name="sh" type="radio" [checked]="isChecked"/>
+          <label class="form-check-label" for="opt1">Politechnika Lubelska</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" [value]="0" [(ngModel)]="sh" id="opt2" name="sh" type="radio" [checked]="!isChecked"/>
+          <label class="form-check-label" for="opt2">another company</label>
+        </div>
 
-        <div class="form-group" *ngIf="sh == 1">
+        <div class="form-group" style="margin-top: 20px;" *ngIf="sh == 1">
           <label for="username">Email*</label>
           <input
             type="email"
@@ -23,7 +25,7 @@
             name="username"
             [(ngModel)]="form.username"
             required
-            pattern="^(.+)@pollub(\.edu\.|\.)pl$"
+            pattern="[a-zA-Z]{1,50}\.[a-zA-Z0-9]{1,50}@pollub(\.edu\.|\.)pl$"
             minlength="3"
             maxlength="50"
             #username="ngModel"
@@ -42,7 +44,7 @@
           </div>
         </div>
 
-        <div class="form-group" *ngIf="sh == 0">
+        <div class="form-group" style="margin-top: 20px;"  *ngIf="sh == 0">
           <label for="username">Email*</label>
           <input
             type="email"
@@ -76,6 +78,7 @@
             name="password"
             [(ngModel)]="form.password"
             required
+            pattern="(?!.* )(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{6,}"
             minlength="6"
             #password="ngModel"
           />
@@ -83,6 +86,9 @@
             <div *ngIf="password.errors.required">Password is required</div>
             <div *ngIf="password.errors.minlength">
               Password must be at least 6 characters
+            </div>
+            <div *ngIf="password.errors.pattern">
+              Password must contain at least one special character and no whitespace
             </div>
           </div>
         </div>

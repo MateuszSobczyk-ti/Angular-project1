@@ -188,7 +188,7 @@ export class BoardEmplDepComponent implements OnInit{
       data_end: this.form.data_end,
       departmentId: this.form.departmentId,
       eventTypeId: this.form.eventTypeId,
-      statusEventId: 3,
+      statusEventId: this.form.statusEventId==null ? 3 : this.form.statusEventId,
       imageId: this.form.imageId,
       comment: this.form.comments,
       place: this.form.place

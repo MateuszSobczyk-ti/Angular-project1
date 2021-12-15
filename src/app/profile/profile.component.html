@@ -4,10 +4,13 @@
         <strong>{{ currentUser.username }}</strong> Profile
       </h3>
     </header>
-    <p>
-      <strong>Token:</strong>
-      {{ currentUser.accessToken.substring(0, 20) }} ...
-      {{ currentUser.accessToken.substr(currentUser.accessToken.length - 20) }}
+    <p *ngIf="currentUser.department != null">
+      <strong>department:</strong>
+      {{ currentUser.department }}
+    </p>
+    <p *ngIf="currentUser.company != null">
+      <strong>company:</strong>
+      {{ currentUser.company }}
     </p>
     <p>
       <strong>Phone:</strong>
@@ -16,16 +19,16 @@
     <strong>Roles:</strong>
     <ul>
       <li *ngFor="let role of currentUser.roles">
-        {{ role }}
+        {{ role.name }}
       </li>
     </ul>
-    <p *ngIf="currentUser.department != null">
-      <strong>department:</strong>
-      {{ currentUser.department }}
+    <p>
+      <strong>Your average event rate:</strong>
+      {{ currentUser.averageRate }}
     </p>
-    <p *ngIf="currentUser.companyName != null">
-      <strong>company:</strong>
-      {{ currentUser.companyName }}
+    <p>
+      <strong>Number of signed events:</strong>
+      {{ currentUser.numberSignedEvents }}
     </p>
   </div>
   
